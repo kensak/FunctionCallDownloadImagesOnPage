@@ -210,7 +210,7 @@ class TestCheckImageSize:
         img.save(img_bytes, format='PNG')
         img_bytes.seek(0)
         
-        result = check_image_size(img_bytes, min_width=100, min_height=100)
+        result = check_image_size(img_bytes, min_width=100, min_height=100, max_width=None, max_height=None)
         
         assert result is True
     
@@ -221,7 +221,7 @@ class TestCheckImageSize:
         img.save(img_bytes, format='PNG')
         img_bytes.seek(0)
         
-        result = check_image_size(img_bytes, min_width=100, min_height=100)
+        result = check_image_size(img_bytes, min_width=100, min_height=100, max_width=None, max_height=None)
         
         assert result is False
     
@@ -232,7 +232,7 @@ class TestCheckImageSize:
         img.save(img_bytes, format='PNG')
         img_bytes.seek(0)
         
-        result = check_image_size(img_bytes, min_width=100, min_height=100)
+        result = check_image_size(img_bytes, min_width=100, min_height=100, max_width=None, max_height=None)
         
         assert result is False
     
@@ -243,7 +243,7 @@ class TestCheckImageSize:
         img.save(img_bytes, format='PNG')
         img_bytes.seek(0)
         
-        result = check_image_size(img_bytes, min_width=100, min_height=100)
+        result = check_image_size(img_bytes, min_width=100, min_height=100, max_width=None, max_height=None)
         
         assert result is False
     
@@ -254,7 +254,7 @@ class TestCheckImageSize:
         img.save(img_bytes, format='PNG')
         img_bytes.seek(0)
         
-        result = check_image_size(img_bytes, min_width=100, min_height=100)
+        result = check_image_size(img_bytes, min_width=100, min_height=100, max_width=None, max_height=None)
         
         assert result is True
 
@@ -269,7 +269,7 @@ class TestCheckImageSizeOptionalFilters:
         img.save(img_bytes, format='PNG')
         img_bytes.seek(0)
         
-        result = check_image_size(img_bytes, min_width=None, min_height=100)
+        result = check_image_size(img_bytes, min_width=None, min_height=100, max_width=None, max_height=None)
         
         assert result is True
     
@@ -280,7 +280,7 @@ class TestCheckImageSizeOptionalFilters:
         img.save(img_bytes, format='PNG')
         img_bytes.seek(0)
         
-        result = check_image_size(img_bytes, min_width=100, min_height=None)
+        result = check_image_size(img_bytes, min_width=100, min_height=None, max_width=None, max_height=None)
         
         assert result is True
     
@@ -291,7 +291,7 @@ class TestCheckImageSizeOptionalFilters:
         img.save(img_bytes, format='PNG')
         img_bytes.seek(0)
         
-        result = check_image_size(img_bytes, min_width=None, min_height=None)
+        result = check_image_size(img_bytes, min_width=None, min_height=None, max_width=None, max_height=None)
         
         assert result is True
     
@@ -302,7 +302,7 @@ class TestCheckImageSizeOptionalFilters:
         img.save(img_bytes, format='PNG')
         img_bytes.seek(0)
         
-        result = check_image_size(img_bytes, min_width=100, min_height=None)
+        result = check_image_size(img_bytes, min_width=100, min_height=None, max_width=None, max_height=None)
         
         assert result is True
     
@@ -313,7 +313,7 @@ class TestCheckImageSizeOptionalFilters:
         img.save(img_bytes, format='PNG')
         img_bytes.seek(0)
         
-        result = check_image_size(img_bytes, min_width=None, min_height=100)
+        result = check_image_size(img_bytes, min_width=None, min_height=100, max_width=None, max_height=None)
         
         assert result is True
 
@@ -325,7 +325,7 @@ class TestCheckImageSizeErrors:
         """Should return False when image data is corrupted."""
         corrupted_data = BytesIO(b"Not a valid image")
         
-        result = check_image_size(corrupted_data, min_width=100, min_height=100)
+        result = check_image_size(corrupted_data, min_width=100, min_height=100, max_width=None, max_height=None)
         
         assert result is False
     
@@ -333,7 +333,7 @@ class TestCheckImageSizeErrors:
         """Should return False when image data is empty."""
         empty_data = BytesIO(b"")
         
-        result = check_image_size(empty_data, min_width=100, min_height=100)
+        result = check_image_size(empty_data, min_width=100, min_height=100, max_width=None, max_height=None)
         
         assert result is False
     
@@ -345,7 +345,7 @@ class TestCheckImageSizeErrors:
         img_bytes.seek(0)
         
         original_size = len(img_bytes.getvalue())
-        check_image_size(img_bytes, min_width=100, min_height=100)
+        check_image_size(img_bytes, min_width=100, min_height=100, max_width=None, max_height=None)
         
         # Stream should still be readable
         img_bytes.seek(0)
@@ -362,7 +362,7 @@ class TestCheckImageSizeEdgeCases:
         img.save(img_bytes, format='PNG')
         img_bytes.seek(0)
         
-        result = check_image_size(img_bytes, min_width=5000, min_height=5000)
+        result = check_image_size(img_bytes, min_width=5000, min_height=5000, max_width=None, max_height=None)
         
         assert result is False
     
@@ -373,7 +373,7 @@ class TestCheckImageSizeEdgeCases:
         img.save(img_bytes, format='PNG')
         img_bytes.seek(0)
         
-        result = check_image_size(img_bytes, min_width=0, min_height=0)
+        result = check_image_size(img_bytes, min_width=0, min_height=0, max_width=None, max_height=None)
         
         assert result is True
     
@@ -384,7 +384,7 @@ class TestCheckImageSizeEdgeCases:
         img.save(img_bytes, format='PNG')
         img_bytes.seek(0)
         
-        result = check_image_size(img_bytes, min_width=1, min_height=1)
+        result = check_image_size(img_bytes, min_width=1, min_height=1, max_width=None, max_height=None)
         
         assert result is True
     
@@ -395,7 +395,7 @@ class TestCheckImageSizeEdgeCases:
         img.save(img_bytes, format='PNG')
         img_bytes.seek(0)
         
-        result = check_image_size(img_bytes, min_width=400, min_height=50)
+        result = check_image_size(img_bytes, min_width=400, min_height=50, max_width=None, max_height=None)
         
         assert result is True
     
@@ -407,6 +407,6 @@ class TestCheckImageSizeEdgeCases:
         img_bytes.seek(0)
         
         # Width passes (200 >= 100) but height fails (80 < 100)
-        result = check_image_size(img_bytes, min_width=100, min_height=100)
+        result = check_image_size(img_bytes, min_width=100, min_height=100, max_width=None, max_height=None)
         
         assert result is False

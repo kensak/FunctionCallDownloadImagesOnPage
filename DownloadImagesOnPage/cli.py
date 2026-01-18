@@ -189,6 +189,19 @@ Examples:
     )
     
     parser.add_argument(
+        '--max-width',
+        type=_validate_positive_int,
+        metavar='PIXELS',
+        help='Maximum image width in pixels (filter out larger images)'
+    )
+    
+    parser.add_argument(
+        '--max-height',
+        type=_validate_positive_int,
+        metavar='PIXELS',
+        help='Maximum image height in pixels (filter out larger images)'
+    )
+    parser.add_argument(
         '--verbose',
         action='store_true',
         help='Enable verbose output'
@@ -203,6 +216,8 @@ Examples:
         output_dir=Path(args.output_dir),
         min_width=args.min_width,
         min_height=args.min_height,
+        max_width=args.max_width,
+        max_height=args.max_height,
         verbose=args.verbose
     )
     

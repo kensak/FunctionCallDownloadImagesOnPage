@@ -22,6 +22,8 @@ class CLIConfig:
         output_dir: 画像を保存する出力ディレクトリ
         min_width: 最小画像幅（ピクセル）、Noneの場合はフィルタリングしない
         min_height: 最小画像高さ（ピクセル）、Noneの場合はフィルタリングしない
+        max_width: 最大画像幅（ピクセル）、Noneの場合はフィルタリングしない
+        max_height: 最大画像高さ（ピクセル）、Noneの場合はフィルタリングしない
         verbose: 詳細な出力を有効にするフラグ
     """
     
@@ -29,6 +31,8 @@ class CLIConfig:
     output_dir: Path
     min_width: Optional[int] = None
     min_height: Optional[int] = None
+    max_width: Optional[int] = None
+    max_height: Optional[int] = None
     verbose: bool = False
 
 

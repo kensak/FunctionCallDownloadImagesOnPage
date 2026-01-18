@@ -66,8 +66,9 @@ def run_download(config: CLIConfig) -> DownloadResult:
             image_data = download_image(url)
             
             # Check size filter
-            if config.min_width is not None or config.min_height is not None:
-                passes_filter = check_image_size(image_data, config.min_width, config.min_height)
+            if config.min_width is not None or config.min_height is not None or \
+                config.max_width is not None or config.max_height is not None:
+                passes_filter = check_image_size(image_data, config.min_width, config.min_height, config.max_width, config.max_height)
                 
                 if not passes_filter:
                     # Get dimensions for logging
@@ -76,7 +77,8 @@ def run_download(config: CLIConfig) -> DownloadResult:
                         logger.info(
                             f"Filtered out: {url} "
                             f"(size: {dimensions.width}x{dimensions.height}, "
-                            f"required: {config.min_width or 'any'}x{config.min_height or 'any'})"
+                            f"required: {config.min_width or '*'}x{config.min_height or '*'}, "
+                            f"max: {config.max_width or '*'}x{config.max_height or '*'})"
                         )
                     else:
                         logger.info(f"Filtered out: {url} (unable to determine size)")

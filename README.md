@@ -99,6 +99,8 @@ python -m DownloadImagesOnPage <URL> <出力ディレクトリ> [オプション
 
 - `--min-width <幅>`: 最小画像幅（ピクセル）
 - `--min-height <高さ>`: 最小画像高さ（ピクセル）
+- `--max-width <幅>`: 最大画像幅（ピクセル）
+- `--max-height <高さ>`: 最大画像高さ（ピクセル）
 - `--verbose`: 詳細な出力を表示
 - `--help`: ヘルプメッセージを表示
 
