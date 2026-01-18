@@ -135,6 +135,8 @@ python -m DownloadImagesOnPage https://example.com ./images
 - 遅延ロード（lazy loading）される画像に対応
 - SPAやReactアプリなどのモダンなWebサイトに対応
 
+**補足（タイムアウト）**: `--playwright` での画像キャプチャは、要素スクリーンショットのタイムアウトをデフォルト **10秒** に設定しています。画面外・非表示の画像要素などは `WARNING: ... Locator.screenshot: Timeout ...` としてスキップされ、処理は継続します。
+
 **注意**: Playwrightを使用する場合、初回実行時にChromiumブラウザがダウンロードされます：
 
 ```bash

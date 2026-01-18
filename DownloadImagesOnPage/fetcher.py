@@ -129,7 +129,7 @@ async def capture_rendered_images(url: str, timeout: int = 10000) -> list:
     """
     from playwright.async_api import async_playwright
     from DownloadImagesOnPage.models import RenderedImage, ImageDimensions
-    from urllib.parse import urlparse, urljoin
+    from urllib.parse import urlparse
     from pathlib import Path
     import logging
     

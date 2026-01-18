@@ -1,5 +1,4 @@
 """Tests for image size filter module."""
-import pytest
 from io import BytesIO
 from PIL import Image
 

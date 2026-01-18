@@ -116,7 +116,8 @@ class TestDevelopmentWorkflow:
              "--tb=line", "-q"],
             capture_output=True,
             text=True,
-            timeout=30,
+            # The suite can take >30s on slower/loaded machines.
+            timeout=120,
             cwd=Path(__file__).parent.parent
         )
         

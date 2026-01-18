@@ -3,8 +3,7 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 from io import BytesIO
 from PIL import Image
-from DownloadImagesOnPage.models import RenderedImage, ImageDimensions
-
+from DownloadImagesOnPage.models import RenderedImage
 
 @pytest.mark.asyncio
 async def test_capture_rendered_images_returns_list():
@@ -58,8 +57,8 @@ async def test_capture_rendered_images_returns_list():
         assert isinstance(images, list)
         assert len(images) == 1
         assert isinstance(images[0], RenderedImage)
-        mock_context.set_default_timeout.assert_called_once_with(5000)
-        mock_page.set_default_timeout.assert_called_once_with(5000)
+        mock_context.set_default_timeout.assert_called_once_with(10000)
+        mock_page.set_default_timeout.assert_called_once_with(10000)
 
 
 @pytest.mark.asyncio
@@ -114,8 +113,8 @@ async def test_capture_rendered_images_extracts_image_data():
         assert images[0].original_url == 'https://example.com/image.png'
         assert images[0].dimensions.width == 150
         assert images[0].dimensions.height == 250
-        mock_context.set_default_timeout.assert_called_once_with(5000)
-        mock_page.set_default_timeout.assert_called_once_with(5000)
+        mock_context.set_default_timeout.assert_called_once_with(10000)
+        mock_page.set_default_timeout.assert_called_once_with(10000)
 
 
 @pytest.mark.asyncio
@@ -175,8 +174,8 @@ async def test_capture_rendered_images_handles_multiple_images():
         assert len(images) == 2
         assert images[0].image_data == img1_data
         assert images[1].image_data == img2_data
-        mock_context.set_default_timeout.assert_called_once_with(5000)
-        mock_page.set_default_timeout.assert_called_once_with(5000)
+        mock_context.set_default_timeout.assert_called_once_with(10000)
+        mock_page.set_default_timeout.assert_called_once_with(10000)
 
 
 @pytest.mark.asyncio
@@ -231,8 +230,8 @@ async def test_capture_rendered_images_skips_failed_screenshots():
         # Should only return the successful image
         assert len(images) == 1
         assert images[0].image_data == img_data
-        mock_context.set_default_timeout.assert_called_once_with(5000)
-        mock_page.set_default_timeout.assert_called_once_with(5000)
+        mock_context.set_default_timeout.assert_called_once_with(10000)
+        mock_page.set_default_timeout.assert_called_once_with(10000)
 
 
 def test_capture_rendered_images_sync_wrapper():
