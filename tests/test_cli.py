@@ -85,12 +85,22 @@ class TestParseArgumentsOptional:
         
         assert config.verbose is True
     
+    def test_parse_arguments_with_playwright(self):
+        """Should parse --playwright flag."""
+        test_args = ['script', 'https://example.com', '/tmp/output', '--playwright']
+        
+        with patch.object(sys, 'argv', test_args):
+            config = parse_arguments()
+        
+        assert config.use_playwright is True
+    
     def test_parse_arguments_with_all_options(self):
         """Should parse all optional arguments together."""
         test_args = [
             'script', 'https://example.com', '/tmp/output',
             '--min-width', '800',
             '--min-height', '600',
+            '--playwright',
             '--verbose'
         ]
         

@@ -10,12 +10,13 @@ from typing import List
 from urllib.parse import urlparse
 
 from .models import CLIConfig, DownloadResult, DownloadStatus, ImageDownloadRecord, ImageDimensions
-from .fetcher import fetch_html
+from .fetcher import fetch_html, fetch_html_playwright, capture_rendered_images_sync
 from .parser import extract_image_urls
 from .downloader import download_image
 from .filter import check_image_size, get_image_dimensions
 from .file_manager import generate_unique_filename, save_image
 from .exceptions import DownloadError, FileWriteError
+from io import BytesIO
 
 # Module logger
 logger = logging.getLogger(__name__)
@@ -33,6 +34,10 @@ def run_download(config: CLIConfig) -> DownloadResult:
     Raises:
         FetchError: If HTML fetch fails (fatal error)
     """
+    # Playwrightモードの場合は別のワークフロー
+    if config.use_playwright:
+        return run_download_with_playwright(config)
+    
     # Step 1: Fetch HTML (fatal error if fails)
     logger.info(f"Fetching HTML from {config.url}")
     html = fetch_html(config.url)
@@ -127,6 +132,104 @@ def run_download(config: CLIConfig) -> DownloadResult:
             continue
     
     # Step 4: Return summary
+    result = DownloadResult(
+        success_count=success_count,
+        failed_count=failed_count,
+        filtered_count=filtered_count,
+        total_count=total_count
+    )
+    
+    logger.info(
+        f"Download complete: {success_count} succeeded, "
+        f"{failed_count} failed, {filtered_count} filtered"
+    )
+    
+    return result
+
+
+def run_download_with_playwright(config: CLIConfig) -> DownloadResult:
+    """Playwrightを使用してレンダリングされた画像を直接保存するワークフロー.
+    
+    Args:
+        config: CLI configuration with URL, output directory, and filters
+        
+    Returns:
+        DownloadResult with summary statistics
+        
+    Raises:
+        FetchError: If page fetch fails (fatal error)
+    """
+    # Step 1: Playwrightで画像をキャプチャ
+    logger.info(f"Capturing rendered images from {config.url} using Playwright")
+    rendered_images = capture_rendered_images_sync(config.url)
+    
+    total_count = len(rendered_images)
+    logger.info(f"Captured {total_count} rendered image(s)")
+    
+    if total_count == 0:
+        return DownloadResult(
+            success_count=0,
+            failed_count=0,
+            filtered_count=0,
+            total_count=0
+        )
+    
+    # Step 2: 各画像を処理
+    success_count = 0
+    failed_count = 0
+    filtered_count = 0
+    
+    for index, rendered_image in enumerate(rendered_images, start=1):
+        logger.info(f"Processing {index}/{total_count}: {rendered_image.original_url}")
+        
+        try:
+            # サイズフィルタリング
+            if config.min_width is not None or config.min_height is not None or \
+                config.max_width is not None or config.max_height is not None:
+                
+                # BytesIOに変換してフィルタチェック
+                image_bytes = BytesIO(rendered_image.image_data)
+                passes_filter = check_image_size(
+                    image_bytes, 
+                    config.min_width, 
+                    config.min_height,
+                    config.max_width,
+                    config.max_height
+                )
+                
+                if not passes_filter:
+                    logger.info(
+                        f"Filtered out: {rendered_image.original_url} "
+                        f"(size: {rendered_image.dimensions.width}x{rendered_image.dimensions.height}, "
+                        f"required: {config.min_width or '*'}x{config.min_height or '*'}, "
+                        f"max: {config.max_width or '*'}x{config.max_height or '*'})"
+                    )
+                    filtered_count += 1
+                    continue
+            
+            # ユニークなファイル名を生成
+            unique_path = generate_unique_filename(config.output_dir, rendered_image.filename)
+            
+            # BytesIOに変換して保存
+            image_bytes = BytesIO(rendered_image.image_data)
+            save_image(image_bytes, unique_path)
+            
+            success_count += 1
+            logger.info(
+                f"Saved: {unique_path.name} "
+                f"({rendered_image.dimensions.width}x{rendered_image.dimensions.height})"
+            )
+            
+        except FileWriteError as e:
+            logger.warning(f"Failed to save {rendered_image.original_url}: {e}")
+            failed_count += 1
+            continue
+        except Exception as e:
+            logger.warning(f"Unexpected error for {rendered_image.original_url}: {e}")
+            failed_count += 1
+            continue
+    
+    # Step 3: Return summary
     result = DownloadResult(
         success_count=success_count,
         failed_count=failed_count,

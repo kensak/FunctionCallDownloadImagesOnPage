@@ -101,6 +101,7 @@ python -m DownloadImagesOnPage <URL> <出力ディレクトリ> [オプション
 - `--min-height <高さ>`: 最小画像高さ（ピクセル）
 - `--max-width <幅>`: 最大画像幅（ピクセル）
 - `--max-height <高さ>`: 最大画像高さ（ピクセル）
+- `--playwright`: JavaScriptレンダリングにPlaywrightを使用（動的コンテンツ対応）
 - `--verbose`: 詳細な出力を表示
 - `--help`: ヘルプメッセージを表示
 
@@ -113,14 +114,31 @@ DownloadImagesOnPage https://example.com ./images
 # uvxで一時実行
 uvx --from download-images-on-page DownloadImagesOnPage https://example.com ./images
 
+# JavaScriptで動的に生成される画像を含むページ（Playwrightを使用）
+DownloadImagesOnPage https://example.com ./images --playwright
+
 # 最小サイズフィルタリング付き
 DownloadImagesOnPage https://example.com ./images --min-width 800 --min-height 600
 
-# 詳細モード
-DownloadImagesOnPage https://example.com ./images --verbose
+# Playwrightと詳細モードの併用
+DownloadImagesOnPage https://example.com ./images --playwright --verbose
 
 # python -mでの実行（後方互換性）
 python -m DownloadImagesOnPage https://example.com ./images
+```
+
+## Playwright機能
+
+`--playwright`オプションを使用すると、Playwrightを使ってページをレンダリングしてから画像を抽出します。これにより以下のような利点があります：
+
+- JavaScriptで動的に生成される画像を取得可能
+- 遅延ロード（lazy loading）される画像に対応
+- SPAやReactアプリなどのモダンなWebサイトに対応
+
+**注意**: Playwrightを使用する場合、初回実行時にChromiumブラウザがダウンロードされます：
+
+```bash
+python -m playwright install chromium
 ```
 
 ## 開発環境のセットアップ

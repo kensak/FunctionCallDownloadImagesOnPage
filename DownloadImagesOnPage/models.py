@@ -6,6 +6,7 @@ This module defines the core data structures used throughout the application:
 - DownloadStatus: Status enum for download operations
 - ImageDownloadRecord: Individual image download record
 - DownloadResult: Summary of download operation results
+- RenderedImage: Playwright rendered image data
 """
 from dataclasses import dataclass
 from enum import Enum
@@ -25,6 +26,7 @@ class CLIConfig:
         max_width: 最大画像幅（ピクセル）、Noneの場合はフィルタリングしない
         max_height: 最大画像高さ（ピクセル）、Noneの場合はフィルタリングしない
         verbose: 詳細な出力を有効にするフラグ
+        use_playwright: Playwrightを使用してJavaScriptレンダリングを実行するフラグ
     """
     
     url: str
@@ -34,6 +36,7 @@ class CLIConfig:
     max_width: Optional[int] = None
     max_height: Optional[int] = None
     verbose: bool = False
+    use_playwright: bool = False
 
 
 class ImageDimensions(NamedTuple):
@@ -46,6 +49,23 @@ class ImageDimensions(NamedTuple):
     
     width: int
     height: int
+
+
+@dataclass
+class RenderedImage:
+    """Playwrightでレンダリングされた画像データ.
+    
+    Attributes:
+        image_data: 画像のバイナリデータ
+        original_url: 元の画像URL（src属性）
+        dimensions: 画像の寸法
+        filename: 提案されるファイル名
+    """
+    
+    image_data: bytes
+    original_url: str
+    dimensions: ImageDimensions
+    filename: str
 
 
 class DownloadStatus(Enum):

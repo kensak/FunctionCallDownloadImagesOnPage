@@ -201,6 +201,13 @@ Examples:
         metavar='PIXELS',
         help='Maximum image height in pixels (filter out larger images)'
     )
+    
+    parser.add_argument(
+        '--playwright',
+        action='store_true',
+        help='Use Playwright to render JavaScript before extracting images'
+    )
+    
     parser.add_argument(
         '--verbose',
         action='store_true',
@@ -218,7 +225,8 @@ Examples:
         min_height=args.min_height,
         max_width=args.max_width,
         max_height=args.max_height,
-        verbose=args.verbose
+        verbose=args.verbose,
+        use_playwright=args.playwright
     )
     
     return config
