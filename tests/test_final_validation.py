@@ -425,7 +425,7 @@ class TestEnvironmentSetup(unittest.TestCase):
     def test_requirements_contains_all_dependencies(self):
         """requirements.txt に必要な依存関係が含まれることを確認"""
         req_file = Path(__file__).parent.parent / 'requirements.txt'
-        content = req_file.read_text()
+        content = req_file.read_text(encoding='utf-8')
 
         required = ['requests', 'beautifulsoup4', 'lxml', 'Pillow']
         for package in required:

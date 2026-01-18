@@ -1,3 +1,31 @@
+# ⚠️ DEPRECATED / 非推奨 ⚠️
+#
+# このファイルは非推奨です。依存関係は pyproject.toml に移行されました。
+# This file is deprecated. Dependencies have been migrated to pyproject.toml.
+#
+# 新しいインストール方法 / New installation methods:
+#
+# 1. uvツールとしてインストール（推奨）:
+#    uv tool install download-images-on-page
+#
+# 2. uvxで一時実行:
+#    uvx download-images-on-page <URL> <output-dir>
+#
+# 3. 開発環境のセットアップ:
+#    uv sync --group dev
+#
+# 詳細は README.md を参照してください。
+# See README.md for more details.
+#
+# ---
+# 後方互換性のため、レガシー方式でも動作します:
+# For backward compatibility, legacy method still works:
+#
+# python -m venv .venv
+# .venv\Scripts\activate  # Windows
+# pip install -r requirements.txt
+# ---
+
 # Image Downloader Dependencies
 # Python 3.11+
 

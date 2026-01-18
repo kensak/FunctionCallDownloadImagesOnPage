@@ -78,7 +78,7 @@ def test_requirements_txt_content():
     base_dir = Path(__file__).parent.parent
     requirements_file = base_dir / 'requirements.txt'
     
-    content = requirements_file.read_text()
+    content = requirements_file.read_text(encoding='utf-8')
     
     required_packages = [
         'requests',

@@ -16,6 +16,7 @@ ENV/
 .coverage
 htmlcov/
 *.cover
+dist/
 
 # IDEs
 .vscode/
